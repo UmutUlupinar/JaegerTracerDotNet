@@ -110,3 +110,7 @@ Jaeger UI'ya şu adresten erişebilirsiniz:
 - Authorization/Token yapısı yoktur
 - Database kullanılmamaktadır (örnek veriler simüle edilir)
 
+## Kullanılan Yapay Zekâ Modelleri
+
+Cursor IDE içinde Auto (agent router) desteğinden yararlanılarak proje adımları planlandı ve kod üretildi
+
