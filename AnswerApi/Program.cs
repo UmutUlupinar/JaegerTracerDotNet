@@ -2,7 +2,6 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using AnswerApi.Services;
 using Shared.Exceptions;
-using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,19 +14,36 @@ builder.Services.AddSwaggerGen();
 var serviceName = "AnswerApi";
 var serviceVersion = "1.0.0";
 
+var jaegerEndpoint = builder.Configuration["Jaeger:Endpoint"] ?? "http://localhost:4317";
+Console.WriteLine($"[OpenTelemetry] Jaeger Endpoint: {jaegerEndpoint}");
+
 builder.Services.AddOpenTelemetry()
     .ConfigureResource(resource => resource
         .AddService(serviceName: serviceName, serviceVersion: serviceVersion))
     .WithTracing(tracing => tracing
-        .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation()
+        .AddAspNetCoreInstrumentation(options =>
+        {
+            options.RecordException = true;
+            options.EnrichWithHttpRequest = (activity, request) =>
+            {
+                activity?.SetTag("http.request.method", request.Method);
+                activity?.SetTag("http.request.path", request.Path);
+            };
+        })
+        .AddHttpClientInstrumentation(options =>
+        {
+            options.RecordException = true;
+        })
         .AddSource("AnswerController")
         .AddSource("AnswerService")
+        .SetSampler(new AlwaysOnSampler())
         .AddOtlpExporter(options =>
         {
-            // Jaeger HTTP endpoint (14268 port)
-            options.Endpoint = new Uri(builder.Configuration["Jaeger:Endpoint"] ?? "http://localhost:14268/api/traces");
-            options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
+            // Jaeger OTLP gRPC endpoint (4318 port)
+            options.Endpoint = new Uri(jaegerEndpoint);
+            options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
+            Console.WriteLine($"[OpenTelemetry] OTLP Exporter configured: {options.Endpoint}");
+            Console.WriteLine($"[OpenTelemetry] OTLP Protocol: {options.Protocol}");
         }));
 
 // Register Services

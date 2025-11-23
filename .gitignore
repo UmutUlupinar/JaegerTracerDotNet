@@ -194,3 +194,10 @@ _ReSharper*/
 # JetBrains Rider
 .idea/
 
+Shared/obj/Debug/net10.0/Shared.GeneratedMSBuildEditorConfig.editorconfig
+Shared/obj/Debug/net10.0/Shared.csproj.FileListAbsolute.txt
+Shared/obj/Debug/net10.0/Shared.AssemblyInfo.cs
+AnswerApi/obj/Debug/net10.0/AnswerApi.AssemblyInfo.cs
+AnswerApi/bin/Debug/net10.0/AnswerApi.deps.json
+AnswerApi/obj/AnswerApi.csproj.nuget.dgspec.json
+AnswerApi/obj/project.assets.json
