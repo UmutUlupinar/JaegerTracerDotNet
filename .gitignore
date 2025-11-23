@@ -201,3 +201,4 @@ AnswerApi/obj/Debug/net10.0/AnswerApi.AssemblyInfo.cs
 AnswerApi/bin/Debug/net10.0/AnswerApi.deps.json
 AnswerApi/obj/AnswerApi.csproj.nuget.dgspec.json
 AnswerApi/obj/project.assets.json
+QuestionApi/obj/Debug/net10.0/QuestionApi.AssemblyInfo.cs
